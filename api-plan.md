@@ -4,3 +4,5 @@
 
 Каталог публикует `GET /equipment` и `GET /equipment/{id}`.
 
+Сервис выдачи публикует `POST /loans` и `POST /loans/{id}/return`.
+
