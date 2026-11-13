@@ -1,0 +1,440 @@
++ docker compose up -d --build --wait
+ Image demo-catalog Building 
+ Image demo-loans Building 
+ Image demo-reports Building 
+ Image demo-gateway Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.79kB done
+#1 DONE 0.0s
+
+#2 [reports internal] load build definition from Dockerfile
+#2 transferring dockerfile: 423B done
+#2 DONE 0.0s
+
+#3 [catalog internal] load build definition from Dockerfile
+#3 transferring dockerfile: 375B done
+#3 DONE 0.0s
+
+#4 [gateway internal] load build definition from Dockerfile
+#4 transferring dockerfile: 104B done
+#4 DONE 0.0s
+
+#5 [loans internal] load build definition from Dockerfile
+#5 transferring dockerfile: 367B done
+#5 DONE 0.0s
+
+#6 [catalog internal] load metadata for mcr.microsoft.com/dotnet/sdk:10.0
+#6 DONE 0.0s
+
+#7 [reports internal] load metadata for mcr.microsoft.com/dotnet/aspnet:10.0
+#7 DONE 0.0s
+
+#8 [gateway internal] load metadata for docker.io/library/nginx:alpine
+#8 DONE 0.0s
+
+#9 [reports internal] load .dockerignore
+#9 transferring context: 50B done
+#9 DONE 0.0s
+
+#10 [catalog internal] load .dockerignore
+#10 transferring context: 50B done
+#10 DONE 0.0s
+
+#11 [loans internal] load .dockerignore
+#11 transferring context: 50B done
+#11 DONE 0.0s
+
+#12 [gateway internal] load .dockerignore
+#12 transferring context: 2B done
+#12 DONE 0.0s
+
+#13 [gateway internal] load build context
+#13 transferring context: 374B done
+#13 DONE 0.0s
+
+#14 [reports build 1/6] FROM mcr.microsoft.com/dotnet/sdk:10.0@sha256:fe0fd4e93bd2fbb47c883b7a6369e5c8d3db8bf01cdc5981f6ee35fbdf3ff4fb
+#14 resolve mcr.microsoft.com/dotnet/sdk:10.0@sha256:fe0fd4e93bd2fbb47c883b7a6369e5c8d3db8bf01cdc5981f6ee35fbdf3ff4fb 0.0s done
+#14 DONE 0.0s
+
+#15 [loans stage-1 1/4] FROM mcr.microsoft.com/dotnet/aspnet:10.0@sha256:bfd912c83295ce66d4b706ebb8541b9f14259b0e76fbb88b2751f58ce2399d2e
+#15 resolve mcr.microsoft.com/dotnet/aspnet:10.0@sha256:bfd912c83295ce66d4b706ebb8541b9f14259b0e76fbb88b2751f58ce2399d2e 0.0s done
+#15 DONE 0.0s
+
+#16 [catalog internal] load build context
+#16 transferring context: 163B done
+#16 DONE 0.0s
+
+#17 [gateway 1/2] FROM docker.io/library/nginx:alpine@sha256:fed7e14be83cbd2661a75cdc5b872d936cf155d46c327084d30b8df19ae88d72
+#17 resolve docker.io/library/nginx:alpine@sha256:fed7e14be83cbd2661a75cdc5b872d936cf155d46c327084d30b8df19ae88d72 0.0s done
+#17 DONE 0.0s
+
+#18 [reports internal] load build context
+#18 transferring context: 2.82kB done
+#18 DONE 0.0s
+
+#19 [loans internal] load build context
+#19 transferring context: 5.53kB done
+#19 DONE 0.0s
+
+#20 [gateway 2/2] COPY default.conf /etc/nginx/conf.d/default.conf
+#20 CACHED
+
+#21 [loans build 3/6] COPY Loans.csproj .
+#21 CACHED
+
+#22 [loans build 5/6] COPY . .
+#22 CACHED
+
+#23 [loans build 4/6] RUN dotnet restore Loans.csproj
+#23 CACHED
+
+#24 [loans build 6/6] RUN dotnet publish Loans.csproj -c Release -o /out --no-restore
+#24 CACHED
+
+#25 [loans stage-1 3/3] COPY --from=build /out .
+#25 CACHED
+
+#26 [catalog build 5/6] COPY . .
+#26 CACHED
+
+#27 [catalog build 6/6] RUN dotnet publish Catalog.csproj -c Release -o /out --no-restore
+#27 CACHED
+
+#28 [catalog build 4/6] RUN dotnet restore Catalog.csproj
+#28 CACHED
+
+#29 [catalog build 3/6] COPY Catalog.csproj .
+#29 CACHED
+
+#30 [catalog stage-1 3/3] COPY --from=build /out .
+#30 CACHED
+
+#31 [reports build 3/6] COPY Reports.csproj .
+#31 CACHED
+
+#32 [reports build 5/6] COPY . .
+#32 CACHED
+
+#33 [reports stage-1 3/4] COPY --from=build /out .
+#33 CACHED
+
+#34 [reports build 6/6] RUN dotnet publish Reports.csproj -c Release -o /out --no-restore
+#34 CACHED
+
+#35 [reports build 2/6] WORKDIR /src
+#35 CACHED
+
+#36 [reports build 4/6] RUN dotnet restore Reports.csproj
+#36 CACHED
+
+#37 [reports stage-1 2/4] WORKDIR /app
+#37 CACHED
+
+#38 [reports stage-1 4/4] RUN mkdir /exports && chown "1654" /exports
+#38 CACHED
+
+#39 [gateway] exporting to image
+#39 exporting layers done
+#39 exporting manifest sha256:4464067a533f65bd7189f47540106af54dffa3e1f0f8477a2c0ce831cc4c66d1 done
+#39 exporting config sha256:7217b7a4b9b818e8a3e27d69e6bae37a34eef1a77f5ab5c9c8f77cdc98b21c74 done
+#39 exporting attestation manifest sha256:ecd9ede07f76b1209aef3cd0ba8df668e1afb8707736c3cc9b94775250e0910b 0.0s done
+#39 exporting manifest list sha256:c14c01922a8048f6095bda920925928cca1fc9498e75c9211a5759e859170157
+#39 exporting manifest list sha256:c14c01922a8048f6095bda920925928cca1fc9498e75c9211a5759e859170157 0.0s done
+#39 naming to docker.io/library/demo-gateway:latest 0.0s done
+#39 unpacking to docker.io/library/demo-gateway:latest 0.0s done
+#39 DONE 0.2s
+
+#40 [catalog] exporting to image
+#40 exporting layers done
+#40 exporting manifest sha256:b9ce2e999c8d663740554cfe8fc8cba023baa534e51209b60a30f4db954c7da1 done
+#40 exporting config sha256:4f98c150af8d0505c989207207a2f41eeea682877659cc2379fbeb9e1114ea88 done
+#40 exporting attestation manifest sha256:b22c19d65b8f9e1a75fb255fe56f4990d96fe290809e736fd64f663159d92381 0.0s done
+#40 exporting manifest list sha256:46de019175e72bd4cfcdf5cd31164d3e2e0352a508844533f2c1a27d9e22bde2 0.0s done
+#40 naming to docker.io/library/demo-catalog:latest 0.0s done
+#40 unpacking to docker.io/library/demo-catalog:latest 0.0s done
+#40 DONE 0.2s
+
+#41 [loans] exporting to image
+#41 exporting layers done
+#41 exporting manifest sha256:bbd0e22fca529d1e43d82f9a73cadbac5caf17a723ffe5fd85401a4c153afe53 done
+#41 exporting config sha256:38ca450f13100aa1a6f7e7b26d3d4668743daf10863fe160662efb0cc405bb3a done
+#41 exporting attestation manifest sha256:0ce58fe5de4f4a47af1aceeca27f260e5913a1a63baec74def6bf488f4e501b8 0.0s done
+#41 exporting manifest list sha256:35f53fa90e565e2a1837eaa9c0e1a581eed8f3c02e30ccd2d17a7e4fcf185feb 0.0s done
+#41 naming to docker.io/library/demo-loans:latest done
+#41 unpacking to docker.io/library/demo-loans:latest 0.0s done
+#41 DONE 0.2s
+
+#42 [reports] exporting to image
+#42 exporting layers done
+#42 exporting manifest sha256:4cfeba0a6886cb6cfb668b63ffd24882e901da5f7b6a4b0f13f9cb7093ab48fc done
+#42 exporting config sha256:6945b7ce52315fbd8389348150a27dd399dee7475d0cb8a8dc4f43da89a934ff 0.0s done
+#42 exporting attestation manifest sha256:f0ac3d2fa791fc924aee63f4b62d8b89d924edf4760298c45a7e76ce71183a9b 0.0s done
+#42 exporting manifest list sha256:dc22df5a7389ff2dacbdced93554bd56fd6b5824b75c3dfbf36a8563166f3089 0.0s done
+#42 naming to docker.io/library/demo-reports:latest done
+#42 unpacking to docker.io/library/demo-reports:latest 0.0s done
+#42 DONE 0.2s
+
+#43 [gateway] resolving provenance for metadata file
+#43 DONE 0.1s
+
+#44 [catalog] resolving provenance for metadata file
+#44 DONE 0.1s
+
+#45 [loans] resolving provenance for metadata file
+#45 DONE 0.1s
+
+#46 [reports] resolving provenance for metadata file
+#46 DONE 0.0s
+ Image demo-catalog Built 
+ Image demo-loans Built 
+ Image demo-reports Built 
+ Image demo-gateway Built 
+ Network demo_app Creating 
+ Volume demo_report_data Creating 
+ Volume demo_db_data Creating 
+ Volume demo_db_data Created 
+ Volume demo_report_data Created 
+ Network demo_app Created 
+ Container demo-db-1 Creating 
+ Container demo-db-1 Created 
+ Container demo-catalog-1 Creating 
+ Container demo-catalog-1 Created 
+ Container demo-loans-1 Creating 
+ Container demo-loans-1 Created 
+ Container demo-reports-1 Creating 
+ Container demo-reports-1 Created 
+ Container demo-gateway-1 Creating 
+ Container demo-gateway-1 Created 
+ Container demo-db-1 Starting 
+ Container demo-db-1 Started 
+ Container demo-db-1 Waiting 
+ Container demo-db-1 Healthy 
+ Container demo-catalog-1 Starting 
+ Container demo-catalog-1 Started 
+ Container demo-loans-1 Starting 
+ Container demo-loans-1 Started 
+ Container demo-reports-1 Starting 
+ Container demo-reports-1 Started 
+ Container demo-gateway-1 Starting 
+ Container demo-gateway-1 Started 
+ Container demo-catalog-1 Waiting 
+ Container demo-loans-1 Waiting 
+ Container demo-reports-1 Waiting 
+ Container demo-db-1 Waiting 
+ Container demo-gateway-1 Waiting 
+ Container demo-gateway-1 Healthy 
+ Container demo-catalog-1 Healthy 
+ Container demo-loans-1 Healthy 
+ Container demo-db-1 Healthy 
+ Container demo-reports-1 Healthy 
++ docker compose ps
+NAME             IMAGE          COMMAND                  SERVICE   CREATED         STATUS                   PORTS
+demo-catalog-1   demo-catalog   "dotnet Catalog.dll"     catalog   7 seconds ago   Up 1 second              8080/tcp
+demo-db-1        postgres:16    "docker-entrypoint.s…"   db        7 seconds ago   Up 6 seconds (healthy)   5432/tcp
+demo-gateway-1   demo-gateway   "/docker-entrypoint.…"   gateway   7 seconds ago   Up Less than a second    80/tcp, 127.0.0.1:8080->8080/tcp
+demo-loans-1     demo-loans     "dotnet Loans.dll"       loans     7 seconds ago   Up 1 second              8080/tcp
+demo-reports-1   demo-reports   "dotnet Reports.dll"     reports   7 seconds ago   Up Less than a second    8080/tcp
++ curl --retry 12 --retry-all-errors --retry-delay 1 -fsS http://127.0.0.1:8080/health
+gateway ok++ date +%s
++ code=LAB-DEMO-1794580163
+++ curl -fsS -H 'Content-Type: application/json' -d '{"code":"LAB-DEMO-1794580163","name":"Мультиметр"}' http://127.0.0.1:8080/equipment
++ equipment='{"id":1,"code":"LAB-DEMO-1794580163","name":"Мультиметр"}'
++ printf '%s\n' '{"id":1,"code":"LAB-DEMO-1794580163","name":"Мультиметр"}'
++ jq -e --arg code LAB-DEMO-1794580163 'select(.code == $code)'
+{
+  "id": 1,
+  "code": "LAB-DEMO-1794580163",
+  "name": "Мультиметр"
+}
+++ printf '%s\n' '{"id":1,"code":"LAB-DEMO-1794580163","name":"Мультиметр"}'
+++ jq -er .id
++ equipment_id=1
++ request='{"equipmentId":1,"borrower":"Тестовый студент"}'
+++ curl -fsS -H 'Content-Type: application/json' -d '{"equipmentId":1,"borrower":"Тестовый студент"}' http://127.0.0.1:8080/loans
++ loan='{"id":1,"equipmentId":1,"borrower":"Тестовый студент","issuedAt":"2026-11-13T14:29:23.683961Z","returnedAt":null}'
++ printf '%s\n' '{"id":1,"equipmentId":1,"borrower":"Тестовый студент","issuedAt":"2026-11-13T14:29:23.683961Z","returnedAt":null}'
++ jq -e 'select(.returnedAt == null)'
+{
+  "id": 1,
+  "equipmentId": 1,
+  "borrower": "Тестовый студент",
+  "issuedAt": "2026-11-13T14:29:23.683961Z",
+  "returnedAt": null
+}
+++ printf '%s\n' '{"id":1,"equipmentId":1,"borrower":"Тестовый студент","issuedAt":"2026-11-13T14:29:23.683961Z","returnedAt":null}'
+++ jq -er .id
++ loan_id=1
+++ curl -sS -o /dev/null -w '%{http_code}' -H 'Content-Type: application/json' -d '{"equipmentId":1,"borrower":"Тестовый студент"}' http://127.0.0.1:8080/loans
++ test 409 = 409
++ curl -fsS -X POST http://127.0.0.1:8080/loans/1/return
++ jq -e 'select(.returnedAt != null)'
+{
+  "id": 1,
+  "equipmentId": 1,
+  "borrower": "Тестовый студент",
+  "issuedAt": "2026-11-13T14:29:23.683961Z",
+  "returnedAt": "2026-11-13T14:29:23.760962Z"
+}
+++ curl -fsS -X POST http://127.0.0.1:8080/reports
++ report='{"id":"002521b8-dee1-4fa5-a491-cdf533424a98","total":1,"active":0,"returned":1,"createdAt":"2026-11-13T14:29:23.9530311+00:00"}'
++ printf '%s\n' '{"id":"002521b8-dee1-4fa5-a491-cdf533424a98","total":1,"active":0,"returned":1,"createdAt":"2026-11-13T14:29:23.9530311+00:00"}'
++ jq -e 'select(.returned >= 1 and .total == (.active + .returned))'
+{
+  "id": "002521b8-dee1-4fa5-a491-cdf533424a98",
+  "total": 1,
+  "active": 0,
+  "returned": 1,
+  "createdAt": "2026-11-13T14:29:23.9530311+00:00"
+}
+++ printf '%s\n' '{"id":"002521b8-dee1-4fa5-a491-cdf533424a98","total":1,"active":0,"returned":1,"createdAt":"2026-11-13T14:29:23.9530311+00:00"}'
+++ jq -er .id
++ report_id=002521b8-dee1-4fa5-a491-cdf533424a98
++ docker compose down
+ Container demo-gateway-1 Stopping 
+ Container demo-gateway-1 Stopped 
+ Container demo-gateway-1 Removing 
+ Container demo-gateway-1 Removed 
+ Container demo-reports-1 Stopping 
+ Container demo-reports-1 Stopped 
+ Container demo-reports-1 Removing 
+ Container demo-reports-1 Removed 
+ Container demo-loans-1 Stopping 
+ Container demo-loans-1 Stopped 
+ Container demo-loans-1 Removing 
+ Container demo-loans-1 Removed 
+ Container demo-catalog-1 Stopping 
+ Container demo-catalog-1 Stopped 
+ Container demo-catalog-1 Removing 
+ Container demo-catalog-1 Removed 
+ Container demo-db-1 Stopping 
+ Container demo-db-1 Stopped 
+ Container demo-db-1 Removing 
+ Container demo-db-1 Removed 
+ Network demo_app Removing 
+ Network demo_app Removed 
++ docker compose up -d --wait
+ Network demo_app Creating 
+ Network demo_app Created 
+ Container demo-db-1 Creating 
+ Container demo-db-1 Created 
+ Container demo-catalog-1 Creating 
+ Container demo-catalog-1 Created 
+ Container demo-loans-1 Creating 
+ Container demo-loans-1 Created 
+ Container demo-reports-1 Creating 
+ Container demo-reports-1 Created 
+ Container demo-gateway-1 Creating 
+ Container demo-gateway-1 Created 
+ Container demo-db-1 Starting 
+ Container demo-db-1 Started 
+ Container demo-db-1 Waiting 
+ Container demo-db-1 Healthy 
+ Container demo-catalog-1 Starting 
+ Container demo-catalog-1 Started 
+ Container demo-loans-1 Starting 
+ Container demo-loans-1 Started 
+ Container demo-reports-1 Starting 
+ Container demo-reports-1 Started 
+ Container demo-gateway-1 Starting 
+ Container demo-gateway-1 Started 
+ Container demo-reports-1 Waiting 
+ Container demo-db-1 Waiting 
+ Container demo-gateway-1 Waiting 
+ Container demo-catalog-1 Waiting 
+ Container demo-loans-1 Waiting 
+ Container demo-gateway-1 Healthy 
+ Container demo-db-1 Healthy 
+ Container demo-catalog-1 Healthy 
+ Container demo-reports-1 Healthy 
+ Container demo-loans-1 Healthy 
++ docker compose ps
+NAME             IMAGE          COMMAND                  SERVICE   CREATED          STATUS                   PORTS
+demo-catalog-1   demo-catalog   "dotnet Catalog.dll"     catalog   10 seconds ago   Up 1 second              8080/tcp
+demo-db-1        postgres:16    "docker-entrypoint.s…"   db        10 seconds ago   Up 9 seconds (healthy)   5432/tcp
+demo-gateway-1   demo-gateway   "/docker-entrypoint.…"   gateway   10 seconds ago   Up Less than a second    80/tcp, 127.0.0.1:8080->8080/tcp
+demo-loans-1     demo-loans     "dotnet Loans.dll"       loans     10 seconds ago   Up 1 second              8080/tcp
+demo-reports-1   demo-reports   "dotnet Reports.dll"     reports   10 seconds ago   Up 1 second              8080/tcp
+++ curl --retry 12 --retry-all-errors --retry-delay 1 -fsS http://127.0.0.1:8080/loans/1
++ saved='{"id":1,"equipmentId":1,"borrower":"Тестовый студент","issuedAt":"2026-11-13T14:29:23.683961Z","returnedAt":"2026-11-13T14:29:23.760962Z"}'
++ printf '%s\n' '{"id":1,"equipmentId":1,"borrower":"Тестовый студент","issuedAt":"2026-11-13T14:29:23.683961Z","returnedAt":"2026-11-13T14:29:23.760962Z"}'
++ jq -e --argjson id 1 'select(.equipmentId == $id and .returnedAt != null)'
+{
+  "id": 1,
+  "equipmentId": 1,
+  "borrower": "Тестовый студент",
+  "issuedAt": "2026-11-13T14:29:23.683961Z",
+  "returnedAt": "2026-11-13T14:29:23.760962Z"
+}
+++ curl -fsS http://127.0.0.1:8080/reports/002521b8-dee1-4fa5-a491-cdf533424a98
+++ jq -cS .
+++ printf '%s\n' '{"id":"002521b8-dee1-4fa5-a491-cdf533424a98","total":1,"active":0,"returned":1,"createdAt":"2026-11-13T14:29:23.9530311+00:00"}'
+++ jq -cS .
++ test '{"active":0,"createdAt":"2026-11-13T14:29:23.9530311+00:00","id":"002521b8-dee1-4fa5-a491-cdf533424a98","returned":1,"total":1}' = '{"active":0,"createdAt":"2026-11-13T14:29:23.9530311+00:00","id":"002521b8-dee1-4fa5-a491-cdf533424a98","returned":1,"total":1}'
++ docker compose logs --no-color --tail 16 gateway catalog loans reports db
+gateway-1  | /docker-entrypoint.sh: Sourcing /docker-entrypoint.d/15-local-resolvers.envsh
+catalog-1  | warn: Microsoft.AspNetCore.Hosting.Diagnostics[15]
+gateway-1  | /docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+gateway-1  | /docker-entrypoint.sh: Launching /docker-entrypoint.d/30-tune-worker-processes.sh
+gateway-1  | /docker-entrypoint.sh: Configuration complete; ready for start up
+gateway-1  | 2026/11/13 14:29:34 [notice] 1#1: using the "epoll" event method
+gateway-1  | 2026/11/13 14:29:34 [notice] 1#1: nginx/1.31.8
+gateway-1  | 2026/11/13 14:29:34 [notice] 1#1: built by gcc 15.2.0 (Alpine 15.2.0) 
+gateway-1  | 2026/11/13 14:29:34 [notice] 1#1: OS: Linux 6.8.0-147-generic
+gateway-1  | 2026/11/13 14:29:34 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1024:524288
+gateway-1  | 2026/11/13 14:29:34 [notice] 1#1: start worker processes
+gateway-1  | 2026/11/13 14:29:34 [notice] 1#1: start worker process 29
+gateway-1  | 2026/11/13 14:29:34 [notice] 1#1: start worker process 30
+gateway-1  | 2026/11/13 14:29:34 [notice] 1#1: start worker process 31
+gateway-1  | 2026/11/13 14:29:34 [notice] 1#1: start worker process 32
+gateway-1  | 172.18.0.1 - - [13/Nov/2026:14:29:35 +0000] "GET /loans/1 HTTP/1.1" 200 164 "-" "curl/8.5.0" "-"
+gateway-1  | 172.18.0.1 - - [13/Nov/2026:14:29:35 +0000] "GET /reports/002521b8-dee1-4fa5-a491-cdf533424a98 HTTP/1.1" 200 127 "-" "curl/8.5.0" "-"
+catalog-1  |       Overriding HTTP_PORTS '8080' and HTTPS_PORTS ''. Binding to values defined by URLS instead 'http://+:8080'.
+catalog-1  | info: Microsoft.Hosting.Lifetime[14]
+catalog-1  |       Now listening on: http://[::]:8080
+catalog-1  | info: Microsoft.Hosting.Lifetime[0]
+catalog-1  |       Application started. Press Ctrl+C to shut down.
+catalog-1  | info: Microsoft.Hosting.Lifetime[0]
+catalog-1  |       Hosting environment: Production
+catalog-1  | info: Microsoft.Hosting.Lifetime[0]
+catalog-1  |       Content root path: /app
+reports-1  | info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+db-1       | 
+reports-1  |       Executing endpoint 'HTTP: GET /reports/{id:guid}'
+reports-1  | info: Microsoft.AspNetCore.Http.Result.PhysicalFileResult[5]
+reports-1  |       Sending file with download name ''.
+reports-1  | info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+reports-1  |       Executed endpoint 'HTTP: GET /reports/{id:guid}'
+reports-1  | info: Microsoft.AspNetCore.HttpLogging.HttpLoggingMiddleware[2]
+reports-1  |       Response:
+reports-1  |       StatusCode: 200
+reports-1  |       Content-Type: application/json
+reports-1  |       Date: Fri, 13 Nov 2026 14:29:35 GMT
+reports-1  |       Server: Kestrel
+reports-1  |       Last-Modified: Fri, 13 Nov 2026 14:29:23 GMT
+reports-1  |       Content-Length: 127
+reports-1  | info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+reports-1  |       Request finished HTTP/1.1 GET http://reports:8080/reports/002521b8-dee1-4fa5-a491-cdf533424a98 - 200 127 application/json 84.4431ms
+loans-1    | Error: libgssapi_krb5.so.2: cannot open shared object file: No such file or directory
+loans-1    | info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]
+loans-1    |       Setting HTTP status code 200.
+loans-1    | info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]
+loans-1    |       Writing value of type 'Loan' as Json.
+loans-1    | info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+loans-1    |       Executed endpoint 'HTTP: GET /loans/{id:int}'
+loans-1    | info: Microsoft.AspNetCore.HttpLogging.HttpLoggingMiddleware[2]
+loans-1    |       Response:
+loans-1    |       StatusCode: 200
+loans-1    |       Content-Type: application/json; charset=utf-8
+loans-1    |       Date: Fri, 13 Nov 2026 14:29:35 GMT
+loans-1    |       Server: Kestrel
+loans-1    |       Transfer-Encoding: chunked
+loans-1    | info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+loans-1    |       Request finished HTTP/1.1 GET http://loans:8080/loans/1 - 200 - application/json;+charset=utf-8 248.1556ms
+db-1       | PostgreSQL Database directory appears to contain a database; Skipping initialization
+db-1       | 
+db-1       | 2026-11-13 14:29:26.152 UTC [1] LOG:  starting PostgreSQL 16.16 (Debian 16.16-1.pgdg13+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+db-1       | 2026-11-13 14:29:26.152 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+db-1       | 2026-11-13 14:29:26.152 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+db-1       | 2026-11-13 14:29:26.154 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+db-1       | 2026-11-13 14:29:26.159 UTC [29] LOG:  database system was shut down at 2026-11-13 14:29:24 UTC
+db-1       | 2026-11-13 14:29:26.165 UTC [1] LOG:  database system is ready to accept connections

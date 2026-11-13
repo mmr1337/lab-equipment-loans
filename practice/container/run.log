@@ -1,0 +1,114 @@
++ docker build --progress plain -t lab-catalog-demo ./services/catalog
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 375B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for mcr.microsoft.com/dotnet/aspnet:10.0
+#2 DONE 0.0s
+
+#3 [internal] load metadata for mcr.microsoft.com/dotnet/sdk:10.0
+#3 DONE 0.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 50B done
+#4 DONE 0.0s
+
+#5 [stage-1 1/3] FROM mcr.microsoft.com/dotnet/aspnet:10.0@sha256:bfd912c83295ce66d4b706ebb8541b9f14259b0e76fbb88b2751f58ce2399d2e
+#5 resolve mcr.microsoft.com/dotnet/aspnet:10.0@sha256:bfd912c83295ce66d4b706ebb8541b9f14259b0e76fbb88b2751f58ce2399d2e 0.0s done
+#5 DONE 0.0s
+
+#6 [build 1/6] FROM mcr.microsoft.com/dotnet/sdk:10.0@sha256:fe0fd4e93bd2fbb47c883b7a6369e5c8d3db8bf01cdc5981f6ee35fbdf3ff4fb
+#6 resolve mcr.microsoft.com/dotnet/sdk:10.0@sha256:fe0fd4e93bd2fbb47c883b7a6369e5c8d3db8bf01cdc5981f6ee35fbdf3ff4fb 0.0s done
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 5.40kB done
+#7 DONE 0.0s
+
+#8 [build 4/6] RUN dotnet restore Catalog.csproj
+#8 CACHED
+
+#9 [stage-1 2/3] WORKDIR /app
+#9 CACHED
+
+#10 [build 2/6] WORKDIR /src
+#10 CACHED
+
+#11 [build 3/6] COPY Catalog.csproj .
+#11 CACHED
+
+#12 [build 5/6] COPY . .
+#12 CACHED
+
+#13 [build 6/6] RUN dotnet publish Catalog.csproj -c Release -o /out --no-restore
+#13 CACHED
+
+#14 [stage-1 3/3] COPY --from=build /out .
+#14 CACHED
+
+#15 exporting to image
+#15 exporting layers done
+#15 exporting manifest sha256:67facee6c888aafe3c32a5639a1df66533a49b93b6dfa9e2bde9fac266635315 done
+#15 exporting config sha256:6101d61dead86eac115c3d6b1af3c28769fbd19662a44ea129808d59ce5e860c done
+#15 exporting attestation manifest sha256:a1ea209a0940a71e0c9d122ace157c6233b1893c7d2052fadd3ea8cfcd694d95 0.0s done
+#15 exporting manifest list sha256:c75e11017fc906df31ac91e8126cae24b83bb222c98ca76d83e7e67d2dde8e8d done
+#15 naming to docker.io/library/lab-catalog-demo:latest done
+#15 unpacking to docker.io/library/lab-catalog-demo:latest done
+#15 DONE 0.1s
++ docker run -d --name lab-catalog-demo -p 127.0.0.1:8080:8080 -e Logging__LogLevel__Microsoft.AspNetCore.HttpLogging=Information lab-catalog-demo
+0ead9f63dedee1e8c35323e2bd0638275b9001deccc214b48f952fd93b7a293e
++ docker ps --filter name=lab-catalog-demo
+CONTAINER ID   IMAGE              COMMAND                CREATED                  STATUS                  PORTS                      NAMES
+0ead9f63dede   lab-catalog-demo   "dotnet Catalog.dll"   Less than a second ago   Up Less than a second   127.0.0.1:8080->8080/tcp   lab-catalog-demo
+++ curl --retry 12 --retry-all-errors --retry-delay 1 -fsS http://127.0.0.1:8080/equipment
+curl: (56) Recv failure: Connection reset by peer
+curl: (56) Recv failure: Connection reset by peer
++ response='[{"id":1,"code":"LAB-001","name":"Мультиметр"}]'
++ printf '%s\n' '[{"id":1,"code":"LAB-001","name":"Мультиметр"}]'
++ jq -e '.[] | select(.code == "LAB-001")'
+{
+  "id": 1,
+  "code": "LAB-001",
+  "name": "Мультиметр"
+}
++ docker logs lab-catalog-demo
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://[::]:8080
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /app
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://127.0.0.1:8080/equipment - - -
+info: Microsoft.AspNetCore.HttpLogging.HttpLoggingMiddleware[1]
+      Request:
+      Protocol: HTTP/1.1
+      Method: GET
+      Scheme: http
+      PathBase: 
+      Path: /equipment
+      Accept: */*
+      Host: 127.0.0.1:8080
+      User-Agent: curl/8.5.0
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'HTTP: GET /equipment'
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]
+      Setting HTTP status code 200.
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]
+      Writing value of type 'List`1' as Json.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'HTTP: GET /equipment'
+info: Microsoft.AspNetCore.HttpLogging.HttpLoggingMiddleware[2]
+      Response:
+      StatusCode: 200
+      Content-Type: application/json; charset=utf-8
+      Date: Fri, 13 Nov 2026 14:28:49 GMT
+      Server: Kestrel
+      Transfer-Encoding: chunked
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://127.0.0.1:8080/equipment - 200 - application/json;+charset=utf-8 154.1587ms
++ docker rm -f lab-catalog-demo

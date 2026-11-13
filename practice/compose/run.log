@@ -1,0 +1,207 @@
++ docker compose up -d --build --wait
+ Image compose-api Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 510B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 375B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for mcr.microsoft.com/dotnet/sdk:10.0
+#3 DONE 0.0s
+
+#4 [internal] load metadata for mcr.microsoft.com/dotnet/aspnet:10.0
+#4 DONE 0.0s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 50B done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 DONE 0.0s
+
+#7 [build 1/6] FROM mcr.microsoft.com/dotnet/sdk:10.0@sha256:fe0fd4e93bd2fbb47c883b7a6369e5c8d3db8bf01cdc5981f6ee35fbdf3ff4fb
+#7 resolve mcr.microsoft.com/dotnet/sdk:10.0@sha256:fe0fd4e93bd2fbb47c883b7a6369e5c8d3db8bf01cdc5981f6ee35fbdf3ff4fb 0.0s done
+#7 DONE 0.0s
+
+#8 [stage-1 1/3] FROM mcr.microsoft.com/dotnet/aspnet:10.0@sha256:bfd912c83295ce66d4b706ebb8541b9f14259b0e76fbb88b2751f58ce2399d2e
+#8 resolve mcr.microsoft.com/dotnet/aspnet:10.0@sha256:bfd912c83295ce66d4b706ebb8541b9f14259b0e76fbb88b2751f58ce2399d2e
+#8 resolve mcr.microsoft.com/dotnet/aspnet:10.0@sha256:bfd912c83295ce66d4b706ebb8541b9f14259b0e76fbb88b2751f58ce2399d2e 0.0s done
+#8 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 163B done
+#6 DONE 0.0s
+
+#9 [build 3/6] COPY Catalog.csproj .
+#9 CACHED
+
+#10 [build 4/6] RUN dotnet restore Catalog.csproj
+#10 CACHED
+
+#11 [build 6/6] RUN dotnet publish Catalog.csproj -c Release -o /out --no-restore
+#11 CACHED
+
+#12 [build 5/6] COPY . .
+#12 CACHED
+
+#13 [stage-1 2/3] WORKDIR /app
+#13 CACHED
+
+#14 [build 2/6] WORKDIR /src
+#14 CACHED
+
+#15 [stage-1 3/3] COPY --from=build /out .
+#15 CACHED
+
+#16 exporting to image
+#16 exporting layers done
+#16 exporting manifest sha256:1c8c64487e4838136bb3166770fc3c56f7c146c074109a65fc16825db6f9b5bb done
+#16 exporting config sha256:c2c7eaafe5cd94548e427c0cd72432125b3b60af16bf624896c7269f4dbc99e9 done
+#16 exporting attestation manifest sha256:d961559659d25330d228663b77bd354e27de1aab1328f2765042d8a78eb2c642 0.0s done
+#16 exporting manifest list sha256:24deaa0adcd642c5b2186dd8a73b038e55044d8aeb7feb7081a2f642ae8d3001 done
+#16 naming to docker.io/library/compose-api:latest done
+#16 unpacking to docker.io/library/compose-api:latest done
+#16 DONE 0.1s
+
+#17 resolving provenance for metadata file
+#17 DONE 0.0s
+ Image compose-api Built 
+ Network compose_app Creating 
+ Volume compose_db_data Creating 
+ Volume compose_db_data Created 
+ Network compose_app Created 
+ Container compose-db-1 Creating 
+ Container compose-db-1 Created 
+ Container compose-api-1 Creating 
+ Container compose-api-1 Created 
+ Container compose-db-1 Starting 
+ Container compose-db-1 Started 
+ Container compose-db-1 Waiting 
+ Container compose-db-1 Healthy 
+ Container compose-api-1 Starting 
+ Container compose-api-1 Started 
+ Container compose-db-1 Waiting 
+ Container compose-api-1 Waiting 
+ Container compose-api-1 Healthy 
+ Container compose-db-1 Healthy 
++ docker compose ps
+NAME            IMAGE         COMMAND                  SERVICE   CREATED          STATUS                    PORTS
+compose-api-1   compose-api   "dotnet Catalog.dll"     api       13 seconds ago   Up 8 seconds              127.0.0.1:8081->8080/tcp
+compose-db-1    postgres:16   "docker-entrypoint.s…"   db        13 seconds ago   Up 13 seconds (healthy)   5432/tcp
+++ curl --retry 12 --retry-all-errors --retry-delay 1 -fsS http://127.0.0.1:8081/health
++ health='{"service":"catalog"}'
++ printf '%s\n' '{"service":"catalog"}'
++ jq -e '.service == "catalog"'
+true
+++ date +%s
++ code=KT-COMPOSE-1794580144
+++ curl -fsS -H 'Content-Type: application/json' -d '{"code":"KT-COMPOSE-1794580144","name":"Термометр"}' http://127.0.0.1:8081/equipment
++ created='{"id":1,"code":"KT-COMPOSE-1794580144","name":"Термометр"}'
+++ jq -er .id
++ id=1
++ curl -fsS http://127.0.0.1:8081/equipment/1
++ jq -e --arg code KT-COMPOSE-1794580144 'select(.code == $code)'
+{
+  "id": 1,
+  "code": "KT-COMPOSE-1794580144",
+  "name": "Термометр"
+}
++ curl -fsS -X PUT -H 'Content-Type: application/json' -d '{"code":"KT-COMPOSE-1794580144","name":"Цифровой термометр"}' http://127.0.0.1:8081/equipment/1
++ jq -e 'select(.name == "Цифровой термометр")'
+{
+  "id": 1,
+  "code": "KT-COMPOSE-1794580144",
+  "name": "Цифровой термометр"
+}
++ docker compose down
+ Container compose-api-1 Stopping 
+ Container compose-api-1 Stopped 
+ Container compose-api-1 Removing 
+ Container compose-api-1 Removed 
+ Container compose-db-1 Stopping 
+ Container compose-db-1 Stopped 
+ Container compose-db-1 Removing 
+ Container compose-db-1 Removed 
+ Network compose_app Removing 
+ Network compose_app Removed 
++ docker compose up -d --wait
+ Network compose_app Creating 
+ Network compose_app Created 
+ Container compose-db-1 Creating 
+ Container compose-db-1 Created 
+ Container compose-api-1 Creating 
+ Container compose-api-1 Created 
+ Container compose-db-1 Starting 
+ Container compose-db-1 Started 
+ Container compose-db-1 Waiting 
+ Container compose-db-1 Healthy 
+ Container compose-api-1 Starting 
+ Container compose-api-1 Started 
+ Container compose-api-1 Waiting 
+ Container compose-db-1 Waiting 
+ Container compose-db-1 Healthy 
+ Container compose-api-1 Healthy 
++ docker compose ps
+NAME            IMAGE         COMMAND                  SERVICE   CREATED         STATUS                   PORTS
+compose-api-1   compose-api   "dotnet Catalog.dll"     api       8 seconds ago   Up 4 seconds             127.0.0.1:8081->8080/tcp
+compose-db-1    postgres:16   "docker-entrypoint.s…"   db        9 seconds ago   Up 8 seconds (healthy)   5432/tcp
+++ curl --retry 12 --retry-all-errors --retry-delay 1 -fsS http://127.0.0.1:8081/equipment/1
++ saved='{"id":1,"code":"KT-COMPOSE-1794580144","name":"Цифровой термометр"}'
++ printf '%s\n' '{"id":1,"code":"KT-COMPOSE-1794580144","name":"Цифровой термометр"}'
++ jq -e 'select(.name == "Цифровой термометр")'
+{
+  "id": 1,
+  "code": "KT-COMPOSE-1794580144",
+  "name": "Цифровой термометр"
+}
+++ curl -sS -o /dev/null -w '%{http_code}' -X DELETE http://127.0.0.1:8081/equipment/1
++ test 204 = 204
+++ curl -sS -o /dev/null -w '%{http_code}' http://127.0.0.1:8081/equipment/1
++ test 404 = 404
++ docker compose logs --no-color --tail 24 api db
+api-1  |       Request finished HTTP/1.1 DELETE http://127.0.0.1:8081/equipment/1 - 204 - - 8.1731ms
+db-1   | 
+db-1   | PostgreSQL Database directory appears to contain a database; Skipping initialization
+db-1   | 
+db-1   | 2026-11-13 14:29:06.230 UTC [1] LOG:  starting PostgreSQL 16.16 (Debian 16.16-1.pgdg13+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+db-1   | 2026-11-13 14:29:06.230 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+db-1   | 2026-11-13 14:29:06.230 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+db-1   | 2026-11-13 14:29:06.233 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+db-1   | 2026-11-13 14:29:06.237 UTC [29] LOG:  database system was shut down at 2026-11-13 14:29:05 UTC
+db-1   | 2026-11-13 14:29:06.242 UTC [1] LOG:  database system is ready to accept connections
+api-1  | info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+api-1  |       Request starting HTTP/1.1 GET http://127.0.0.1:8081/equipment/1 - - -
+api-1  | info: Microsoft.AspNetCore.HttpLogging.HttpLoggingMiddleware[1]
+api-1  |       Request:
+api-1  |       Protocol: HTTP/1.1
+api-1  |       Method: GET
+api-1  |       Scheme: http
+api-1  |       PathBase: 
+api-1  |       Path: /equipment/1
+api-1  |       Accept: */*
+api-1  |       Host: 127.0.0.1:8081
+api-1  |       User-Agent: curl/8.5.0
+api-1  | info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+api-1  |       Executing endpoint 'HTTP: GET /equipment/{id:int}'
+api-1  | info: Microsoft.AspNetCore.Http.Result.NotFoundObjectResult[1]
+api-1  |       Setting HTTP status code 404.
+api-1  | info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+api-1  |       Executed endpoint 'HTTP: GET /equipment/{id:int}'
+api-1  | info: Microsoft.AspNetCore.HttpLogging.HttpLoggingMiddleware[2]
+api-1  |       Response:
+api-1  |       StatusCode: 404
+api-1  | info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+api-1  |       Request finished HTTP/1.1 GET http://127.0.0.1:8081/equipment/1 - 404 0 - 1.3637ms
++ docker compose down
+ Container compose-api-1 Stopping 
+ Container compose-api-1 Stopped 
+ Container compose-api-1 Removing 
+ Container compose-api-1 Removed 
+ Container compose-db-1 Stopping 
+ Container compose-db-1 Stopped 
+ Container compose-db-1 Removing 
+ Container compose-db-1 Removed 
+ Network compose_app Removing 
+ Network compose_app Removed 
