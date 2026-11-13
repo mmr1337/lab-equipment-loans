@@ -6,7 +6,8 @@ base="http://127.0.0.1:$PORT"
 set -x
 docker compose up -d --build --wait
 docker compose ps
-curl --retry 12 --retry-connrefused --retry-delay 1 -fsS "$base/health" | jq -e '.service == "catalog"'
+health=$(curl --retry 12 --retry-all-errors --retry-delay 1 -fsS "$base/health")
+printf '%s\n' "$health" | jq -e '.service == "catalog"'
 code="KT-COMPOSE-$(date +%s)"
 created=$(curl -fsS -H 'Content-Type: application/json' -d "{\"code\":\"$code\",\"name\":\"Термометр\"}" "$base/equipment")
 id=$(jq -er '.id' <<EOF
@@ -18,7 +19,8 @@ curl -fsS -X PUT -H 'Content-Type: application/json' -d "{\"code\":\"$code\",\"n
 docker compose down
 docker compose up -d --wait
 docker compose ps
-curl --retry 12 --retry-connrefused --retry-delay 1 -fsS "$base/equipment/$id" | jq -e 'select(.name == "Цифровой термометр")'
+saved=$(curl --retry 12 --retry-all-errors --retry-delay 1 -fsS "$base/equipment/$id")
+printf '%s\n' "$saved" | jq -e 'select(.name == "Цифровой термометр")'
 test "$(curl -sS -o /dev/null -w '%{http_code}' -X DELETE "$base/equipment/$id")" = 204
 test "$(curl -sS -o /dev/null -w '%{http_code}' "$base/equipment/$id")" = 404
 docker compose logs --no-color --tail 24 api db

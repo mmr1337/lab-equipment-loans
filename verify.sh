@@ -5,7 +5,7 @@ base="http://127.0.0.1:${PORT:-8080}"
 set -x
 docker compose up -d --build --wait
 docker compose ps
-curl --retry 12 --retry-connrefused --retry-delay 1 -fsS "$base/health"
+curl --retry 12 --retry-all-errors --retry-delay 1 -fsS "$base/health"
 code="LAB-DEMO-$(date +%s)"
 equipment=$(curl -fsS -H 'Content-Type: application/json' -d "{\"code\":\"$code\",\"name\":\"Мультиметр\"}" "$base/equipment")
 printf '%s\n' "$equipment" | jq -e --arg code "$code" 'select(.code == $code)'
@@ -22,6 +22,7 @@ report_id=$(printf '%s\n' "$report" | jq -er .id)
 docker compose down
 docker compose up -d --wait
 docker compose ps
-curl --retry 12 --retry-connrefused --retry-delay 1 -fsS "$base/loans/$loan_id" | jq -e --argjson id "$equipment_id" 'select(.equipmentId == $id and .returnedAt != null)'
+saved=$(curl --retry 12 --retry-all-errors --retry-delay 1 -fsS "$base/loans/$loan_id")
+printf '%s\n' "$saved" | jq -e --argjson id "$equipment_id" 'select(.equipmentId == $id and .returnedAt != null)'
 test "$(curl -fsS "$base/reports/$report_id" | jq -cS .)" = "$(printf '%s\n' "$report" | jq -cS .)"
 docker compose logs --no-color --tail 16 gateway catalog loans reports db
