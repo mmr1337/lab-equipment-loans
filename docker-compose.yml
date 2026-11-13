@@ -1,0 +1,73 @@
+x-app-environment: &app-environment
+  ASPNETCORE_URLS: http://+:8080
+  Logging__LogLevel__Microsoft.AspNetCore.HttpLogging: Information
+
+x-database-environment: &database-environment
+  <<: *app-environment
+  ConnectionStrings__Database: "Host=db;Database=app;Username=postgres;Password=${POSTGRES_PASSWORD:-1234}"
+
+services:
+  gateway:
+    build: ./gateway
+    ports:
+      - "${LISTEN_HOST:-127.0.0.1}:${PORT:-8080}:8080"
+    depends_on:
+      - catalog
+      - loans
+      - reports
+    networks: [app]
+
+  catalog:
+    build: ./services/catalog
+    environment: *database-environment
+    depends_on:
+      db:
+        condition: service_healthy
+    networks: [app]
+
+  loans:
+    build: ./services/loans
+    environment:
+      <<: *database-environment
+      CatalogUrl: http://catalog:8080/
+    depends_on:
+      db:
+        condition: service_healthy
+      catalog:
+        condition: service_started
+    networks: [app]
+
+  reports:
+    build: ./services/reports
+    environment:
+      <<: *app-environment
+      LoansUrl: http://loans:8080/
+      ExportDirectory: /exports
+    depends_on:
+      - loans
+    volumes:
+      - report_data:/exports
+    networks: [app]
+
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: app
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-1234}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./database/01-schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -h 127.0.0.1 -U postgres -d app']
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    networks: [app]
+
+networks:
+  app:
+
+volumes:
+  db_data:
+  report_data:
